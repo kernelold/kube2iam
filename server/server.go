@@ -242,6 +242,26 @@ func (s *Server) doHealthcheck() {
 	}()
 
 	resp, err := http.Get(fmt.Sprintf("http://%s/latest/meta-data/instance-id", s.MetadataAddress))
+	tokenReq, _ := http.NewRequest("PUT",
+		fmt.Sprintf("http://%s/latest/api/token", s.MetadataAddress),
+		nil)
+	tokenReq.Header.Add("X-aws-ec2-metadata-token-ttl-seconds", "600")
+	tokenResp, err := http.DefaultClient.Do(tokenReq)
+
+	token, err := ioutil.ReadAll(tokenResp.Body)
+
+	if err != nil {
+		errMsg = fmt.Sprintf("Error getting token %+v", err)
+		log.Errorf(errMsg)
+		return
+	}
+
+	req, _ := http.NewRequest("GET",
+		fmt.Sprintf("http://%s/latest/meta-data/instance-id", s.MetadataAddress), nil)
+	req.Header.Add("X-aws-ec2-metadata-token", fmt.Sprintf("%s", token))
+	resp, err := http.DefaultClient.Do(req)
+
+
 	if err != nil {
 		errMsg = fmt.Sprintf("Error getting instance id %+v", err)
 		log.Errorf(errMsg)
