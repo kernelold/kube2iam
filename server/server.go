@@ -32,9 +32,9 @@ const (
 	defaultIAMExternalID              = "iam.amazonaws.com/external-id"
 	defaultLogLevel                   = "info"
 	defaultLogFormat                  = "text"
-	defaultMaxElapsedTime             = 2 * time.Second
+	defaultMaxElapsedTime             = 3 * time.Second
 	defaultIAMRoleSessionTTL          = 15 * time.Minute
-	defaultMaxInterval                = 1 * time.Second
+	defaultMaxInterval                = 3 * time.Second
 	defaultMetadataAddress            = "169.254.169.254"
 	defaultNamespaceKey               = "iam.amazonaws.com/allowed-roles"
 	defaultCacheResyncPeriod          = 30 * time.Minute
@@ -248,7 +248,9 @@ func (s *Server) doHealthcheck() {
 		return
 	}
 	if resp.StatusCode != 200 {
-		errMsg = fmt.Sprintf("Error getting instance id, got status: %+s Resp: %+s Err: %+s", resp.Status, resp, err)
+	        respstr = string(resp)
+		respbody = string(resp.Body)
+		errMsg = fmt.Sprintf("Error getting instance id, got status: %+s Resp: %+s Body: %+s Err: %+s", resp.Status, respstr, respbody, err)
 		log.Error(errMsg)
 		return
 	}
@@ -364,8 +366,7 @@ func (s *Server) reverseProxyHandler(logger *log.Entry, w http.ResponseWriter, r
 	// Remove remoteaddr to prevent issues with new IMDSv2 to fail when x-forwarded-for header is present
 	// for more details please see: https://github.com/aws/aws-sdk-ruby/issues/2177 https://github.com/uswitch/kiam/issues/359
 	token := r.Header.Get("X-aws-ec2-metadata-token")
-	log.Infof("Token is %s", token)
-	if (r.Method == http.MethodPut && tokenRouteRegexp.MatchString(r.URL.Path)) || (r.Method == http.MethodGet) {
+	if (r.Method == http.MethodPut && tokenRouteRegexp.MatchString(r.URL.Path)) || (r.Method == http.MethodGet && token != "") {
 		r.RemoteAddr = ""
 	}
 
