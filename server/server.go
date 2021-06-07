@@ -241,7 +241,6 @@ func (s *Server) doHealthcheck() {
 		metrics.HealthcheckStatus.Set(healthcheckResult)
 	}()
 
-	resp, err := http.Get(fmt.Sprintf("http://%s/latest/meta-data/instance-id", s.MetadataAddress))
 	tokenReq, _ := http.NewRequest("PUT",
 		fmt.Sprintf("http://%s/latest/api/token", s.MetadataAddress),
 		nil)
