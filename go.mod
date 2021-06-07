@@ -26,7 +26,7 @@ require (
 	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
 	gopkg.in/gemnasium/logrus-airbrake-hook.v2 v2.1.2 // indirect
 	gopkg.in/karlseguin/expect.v1 v1.0.1 // indirect
-	k8s.io/api v0.19.11
-	k8s.io/apimachinery v0.19.11
-	k8s.io/client-go v0.19.11
+	k8s.io/api v0.17.17
+	k8s.io/apimachinery v0.17.17
+	k8s.io/client-go v0.17.17
 )
