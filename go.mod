@@ -6,7 +6,7 @@ require (
 	github.com/aws/aws-sdk-go v1.38.55
 	github.com/beorn7/perks v0.0.0-20160804104726-4c0e84591b9a // indirect
 	github.com/cenk/backoff v1.0.1-0.20160904140958-8edc80b07f38
-	github.com/coreos/go-iptables v0.1.0
+	github.com/coreos/go-iptables v0.6.0
 	github.com/go-ini/ini v0.0.0-20151119163333-2e44421e256d // indirect
 	github.com/gorilla/context v1.1.1 // indirect
 	github.com/gorilla/mux v0.0.0-20160920230813-757bef944d0f
